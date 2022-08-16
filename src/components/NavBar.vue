@@ -18,21 +18,31 @@
       <div class="collapse navbar-collapse" id="navbarText">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item">
-            <a class="nav-link" href="/"> Home </a>
+            <router-link class="nav-link" :to="{ name: 'home' }">
+              Home
+            </router-link>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="/userlist"> Friends </a>
+            <router-link class="nav-link" :to="{ name: 'userlist' }">
+              Friends
+            </router-link>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="/userprofile"> Posts </a>
+            <router-link class="nav-link" :to="{ name: 'userprofile' }">
+              Posts
+            </router-link>
           </li>
         </ul>
         <ul class="navbar-nav">
           <li class="nav-item">
-            <a class="nav-link" href="/login"> Login </a>
+            <router-link class="nav-link" :to="{ name: 'login' }">
+              Login
+            </router-link>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="/register"> Register </a>
+            <router-link class="nav-link" :to="{ name: 'register' }">
+              Register
+            </router-link>
           </li>
         </ul>
       </div>

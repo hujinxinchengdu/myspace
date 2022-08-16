@@ -1,12 +1,12 @@
 <template>
-  <ContentBase> Home </ContentBase>
+  <ContentBase> Login </ContentBase>
 </template>
 
 <script>
 import ContentBase from "../components/ContentBase.vue";
 
 export default {
-  name: "HomeView",
+  name: "LoginView",
   components: { ContentBase },
 };
 </script>
