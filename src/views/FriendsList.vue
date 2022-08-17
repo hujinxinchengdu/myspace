@@ -8,7 +8,7 @@
     >
       <div class="card-body">
         <div class="row">
-          <div class="col-1">
+          <div class="col-1 img-field">
             <img class="img-fluid user-image" :src="user.photo" alt="" />
           </div>
           <div class="col-11">
@@ -93,5 +93,11 @@ export default {
 .card:hover {
   box-shadow: 3px 3px 10px lightgray;
   transition: 500ms;
+}
+
+.img-field {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 </style>
