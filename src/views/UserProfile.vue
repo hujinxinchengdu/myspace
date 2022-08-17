@@ -29,8 +29,8 @@ export default {
     UserProfileWrite,
   },
   setup() {
-    // const route = useRoute();
-    // const userId = route.params.userId;
+    const route = useRoute();
+    const userId = route.params.userId;
 
     const user = reactive({
       id: 1,
@@ -89,6 +89,7 @@ export default {
       unfollow,
       posts,
       post_a_post,
+      userId,
     };
   },
 };
