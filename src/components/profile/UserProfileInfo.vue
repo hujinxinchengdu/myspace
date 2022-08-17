@@ -8,22 +8,24 @@
         <div class="col-9">
           <div class="username">{{ user.username }}</div>
           <div class="followers">Followers: {{ user.followerCount }}</div>
-          <button
-            @click="follow"
-            v-if="!user.is_followed"
-            type="button"
-            class="btn btn-secondary btn-sm"
-          >
-            Follow
-          </button>
-          <button
-            @click="unfollow"
-            v-if="user.is_followed"
-            type="button"
-            class="btn btn-secondary btn-sm"
-          >
-            Unfollow
-          </button>
+          <div v-if="!is_me" class="btn_follow_unfollow">
+            <button
+              @click="follow"
+              v-if="!user.is_followed"
+              type="button"
+              class="btn btn-secondary btn-sm"
+            >
+              Follow
+            </button>
+            <button
+              @click="unfollow"
+              v-if="user.is_followed"
+              type="button"
+              class="btn btn-secondary btn-sm"
+            >
+              Unfollow
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -33,6 +35,7 @@
 <script>
 import $ from "jquery";
 import { useStore } from "vuex";
+import { computed } from "vue";
 
 export default {
   name: "UserProfileInfo",
@@ -80,9 +83,14 @@ export default {
       });
     };
 
+    let is_me = computed(() => {
+      return parseInt(store.state.user.id) === parseInt(props.user.id);
+    });
+
     return {
       follow,
       unfollow,
+      is_me,
     };
   },
 };
