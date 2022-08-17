@@ -2,16 +2,12 @@
   <div class="card">
     <div class="card-body">
       <div class="row">
-        <div class="col-3">
-          <img
-            class="img-fluid"
-            src="https://cdn.acwing.com/media/user/profile/photo/122062_lg_225e133429.jpg"
-            alt=""
-          />
+        <div class="col-3 img-field">
+          <img class="img-fluid" :src="user.photo" alt="" />
         </div>
         <div class="col-9">
-          <div class="username">{{ fullName }}</div>
-          <div class="followers">Followers: {{ user.folloerCount }}</div>
+          <div class="username">{{ user.username }}</div>
+          <div class="followers">Followers: {{ user.followerCount }}</div>
           <button
             @click="follow"
             v-if="!user.is_followed"
@@ -35,7 +31,8 @@
 </template>
 
 <script>
-import { computed } from "vue";
+import $ from "jquery";
+import { useStore } from "vuex";
 
 export default {
   name: "UserProfileInfo",
@@ -46,20 +43,44 @@ export default {
     },
   },
   setup(props, context) {
-    let fullName = computed(
-      () => props.user.lastname + " " + props.user.firstname
-    );
-
+    const store = useStore();
     const follow = () => {
-      context.emit("follow");
+      $.ajax({
+        url: "https://app165.acapp.acwing.com.cn/myspace/follow/",
+        type: "POST",
+        data: {
+          target_id: props.user.id,
+        },
+        headers: {
+          Authorization: "Bearer " + store.state.user.access,
+        },
+        success(resp) {
+          if (resp.result === "success") {
+            context.emit("follow");
+          }
+        },
+      });
     };
 
     const unfollow = () => {
-      context.emit("unfollow");
+      $.ajax({
+        url: "https://app165.acapp.acwing.com.cn/myspace/follow/",
+        type: "POST",
+        data: {
+          target_id: props.user.id,
+        },
+        headers: {
+          Authorization: "Bearer " + store.state.user.access,
+        },
+        success(resp) {
+          if (resp.result === "success") {
+            context.emit("unfollow");
+          }
+        },
+      });
     };
 
     return {
-      fullName,
       follow,
       unfollow,
     };
@@ -84,5 +105,11 @@ img {
 button {
   pedding: 2px 4px;
   font-size: 12px;
+}
+
+.img-field {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 </style>
