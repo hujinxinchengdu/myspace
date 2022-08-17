@@ -28,7 +28,10 @@
             </router-link>
           </li>
           <li class="nav-item">
-            <router-link class="nav-link" :to="{ name: 'userprofile' }">
+            <router-link
+              class="nav-link"
+              :to="{ name: 'userprofile', params: { userId: 2 } }"
+            >
               Posts
             </router-link>
           </li>
