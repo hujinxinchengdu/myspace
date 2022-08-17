@@ -48,7 +48,7 @@ export default {
         url: "https://app165.acapp.acwing.com.cn/myspace/post/",
         type: "DELETE",
         data: {
-          post_id: post_id,
+          post_id,
         },
         headers: {
           Authorization: "Bearer " + store.state.user.access,
@@ -60,7 +60,6 @@ export default {
         },
       });
     };
-
     return {
       is_me,
       delete_a_post,

@@ -69,6 +69,7 @@ export default {
         Authorization: "Bearer " + store.state.user.access,
       },
       success(resp) {
+        posts.count = resp.length;
         posts.posts = resp;
       },
     });
@@ -93,7 +94,7 @@ export default {
       posts.count++;
       posts.posts.unshift({
         id: posts.count,
-        userId: 1,
+        userId: user.id,
         content: content,
       });
     };
