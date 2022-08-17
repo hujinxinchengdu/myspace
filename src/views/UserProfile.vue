@@ -3,10 +3,14 @@
     <div class="row">
       <div class="col-3">
         <UserProfileInfo @follow="follow" @unfollow="unfollow" :user="user" />
-        <UserProfileWrite @post_a_post="post_a_post" />
+        <UserProfileWrite v-if="is_me" @post_a_post="post_a_post" />
       </div>
       <div class="col-9">
-        <UserProfilePosts :posts="posts" />
+        <UserProfilePosts
+          :user="user"
+          :posts="posts"
+          @delete_a_post="delete_a_post"
+        />
       </div>
     </div>
   </ContentBase>
@@ -17,8 +21,10 @@ import ContentBase from "../components/ContentBase.vue";
 import UserProfileInfo from "../components/profile/UserProfileInfo.vue";
 import UserProfilePosts from "../components/profile/UserProfilePosts.vue";
 import UserProfileWrite from "../components/profile/UserProfileWrite.vue";
-import { reactive } from "vue";
+import { reactive, computed } from "vue";
 import { useRoute } from "vue-router";
+import $ from "jquery";
+import { useStore } from "vuex";
 
 export default {
   name: "UserPosts",
@@ -29,37 +35,46 @@ export default {
     UserProfileWrite,
   },
   setup() {
+    const store = useStore();
     const route = useRoute();
-    const userId = route.params.userId;
+    const userId = parseInt(route.params.userId);
+    const user = reactive({});
+    const posts = reactive({});
 
-    const user = reactive({
-      id: 1,
-      username: "Jinxin Hu",
-      lastname: "Hu",
-      firstname: "Jinxin",
-      folloerCount: 0,
-      is_followed: false,
+    $.ajax({
+      url: "https://app165.acapp.acwing.com.cn/myspace/getinfo/",
+      type: "GET",
+      data: {
+        user_id: userId,
+      },
+      headers: {
+        Authorization: "Bearer " + store.state.user.access,
+      },
+      success(resp) {
+        user.id = resp.id;
+        user.username = resp.username;
+        user.photo = resp.photo;
+        user.followerCount = resp.followerCount;
+        user.is_followed = resp.is_followed;
+      },
     });
 
-    const posts = reactive({
-      count: 3,
-      posts: [
-        {
-          id: 1,
-          userId: 1,
-          content: "Today is a nice day",
-        },
-        {
-          id: 2,
-          userId: 1,
-          content: "Today I feel so happy, beacause I study",
-        },
-        {
-          id: 3,
-          userId: 1,
-          content: "Today it's raining",
-        },
-      ],
+    $.ajax({
+      url: "https://app165.acapp.acwing.com.cn/myspace/post/",
+      type: "GET",
+      data: {
+        user_id: userId,
+      },
+      headers: {
+        Authorization: "Bearer " + store.state.user.access,
+      },
+      success(resp) {
+        posts.posts = resp;
+      },
+    });
+
+    const is_me = computed(() => {
+      return userId === store.state.user.id;
     });
 
     const follow = () => {
@@ -83,6 +98,11 @@ export default {
       });
     };
 
+    const delete_a_post = (post_id) => {
+      posts.posts = posts.posts.filter((post) => post.id !== post_id);
+      posts.count = posts.posts.length;
+    };
+
     return {
       user,
       follow,
@@ -90,6 +110,8 @@ export default {
       posts,
       post_a_post,
       userId,
+      is_me,
+      delete_a_post,
     };
   },
 };
